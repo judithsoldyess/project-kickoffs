@@ -8,16 +8,20 @@ There's nothing to install. This folder *is* the kit.
 
 ## How to open it
 
+**Getting the folder**
+
+If you have a zip, unzip it. If you're on the GitHub page, click **Code → Download ZIP** and unzip it. The folder may be called `Project Kickoff` or `project-kickoffs-main`; either is fine, and you can rename it.
+
 **With Claude Code**
 
-Open a terminal, go to this folder, and start Claude Code:
+Open a terminal, go to the folder, and start Claude Code. For example, if you downloaded it from GitHub into your Downloads folder:
 
 ```
-cd "Project Kickoff"
+cd Downloads/project-kickoffs-main
 claude
 ```
 
-(Use the real path to wherever you unzipped it, for example `cd "Downloads/Project Kickoff"`.) Then type: **Start Here**.
+Use your folder's real name and location. Put quotes around it if the name has a space: `cd "Downloads/Project Kickoff"`. Then type: **Start Here**.
 
 **With another AI coding assistant** (Codex, Cursor, and others)
 
