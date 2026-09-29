@@ -1,0 +1,196 @@
+<!doctype html>
+<!--
+  Project Kickoff — MoSCoW sorter (template).
+  The assistant copies this file to 04-Priorities/sorter.html and replaces ONLY the JSON
+  inside <script id="features"> with the team's features from 03-Features/Features.md.
+  Students: double-click sorter.html to open it in your browser. No internet needed.
+  Nothing is sent anywhere; your choices are kept in this browser only.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sort your features</title>
+<style>
+  :root {
+    --bg: #ffffff; --surface: #f4f5f7; --text: #1a1d21; --muted: #555b63; --line: #d5d8dd;
+    --must: #1f7a3a; --should: #1f5fae; --could: #8a5a00; --wont: #b3261e;
+    --must-bg: #e3f3e8; --should-bg: #e3edf9; --could-bg: #fbf0d9; --wont-bg: #fbe4e2;
+    --focus: #1f5fae;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #15171a; --surface: #202328; --text: #eceef1; --muted: #b3b8bf; --line: #3a3f46;
+      --must: #7fd49a; --should: #8fbaf0; --could: #f0c36b; --wont: #f4958d;
+      --must-bg: #1d3a26; --should-bg: #1c2f48; --could-bg: #3d3018; --wont-bg: #4a2220;
+      --focus: #8fbaf0;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font: 16px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  header { padding: 12px 16px 4px; }
+  h1 { font-size: 1.25rem; margin: 0 0 4px; }
+  .help { margin: 0 0 8px; color: var(--muted); font-size: .95rem; }
+  .counts { position: sticky; top: 0; z-index: 2; background: var(--bg); border-bottom: 1px solid var(--line);
+    display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 8px 16px; list-style: none; }
+  .counts li { padding: 2px 10px; border-radius: 999px; font-size: .9rem; font-weight: 600;
+    border: 1px solid var(--line); }
+  main { max-width: 860px; margin: 0 auto; padding: 8px 16px 120px; }
+  h2 { font-size: 1.05rem; margin: 24px 0 8px; }
+  .row { display: flex; gap: 12px; align-items: center; justify-content: space-between;
+    padding: 10px 0; border-bottom: 1px solid var(--line); }
+  .row .txt { min-width: 0; }
+  .row .name { font-weight: 600; }
+  .row .desc { color: var(--muted); font-size: .92rem; }
+  .btns { display: flex; gap: 6px; flex-shrink: 0; }
+  .btns button { min-width: 44px; min-height: 44px; border-radius: 8px; font: inherit;
+    font-weight: 700; cursor: pointer; background: var(--bg); color: var(--muted);
+    border: 1px solid var(--line); }
+  .btns button[aria-pressed="true"] { border-width: 3px; }
+  .btns button[aria-pressed="true"]::after { content: " ✓"; }
+  .btns button.m[aria-pressed="true"] { background: var(--must-bg); color: var(--must); border-color: var(--must); }
+  .btns button.s[aria-pressed="true"] { background: var(--should-bg); color: var(--should); border-color: var(--should); }
+  .btns button.c[aria-pressed="true"] { background: var(--could-bg); color: var(--could); border-color: var(--could); }
+  .btns button.w[aria-pressed="true"] { background: var(--wont-bg); color: var(--wont); border-color: var(--wont); }
+  button:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+  footer { position: fixed; bottom: 0; left: 0; right: 0; background: var(--bg);
+    border-top: 1px solid var(--line); padding: 12px 16px; display: flex; gap: 12px;
+    align-items: center; flex-wrap: wrap; }
+  .primary { min-height: 44px; padding: 0 18px; border-radius: 8px; border: 0; font: inherit;
+    font-weight: 700; background: var(--should); color: var(--bg); cursor: pointer; }
+  #status { color: var(--muted); }
+  textarea { width: 100%; min-height: 160px; margin-top: 16px; font: .9rem/1.4 ui-monospace, monospace;
+    background: var(--surface); color: var(--text); border: 1px solid var(--line); border-radius: 8px; padding: 8px; }
+  [hidden] { display: none !important; }
+  .tag { display: inline-block; margin-left: 6px; padding: 0 6px; border-radius: 4px; font-size: .8rem; font-weight: 600; background: var(--surface); color: var(--muted); border: 1px solid var(--line); }
+  .ghost { min-height: 44px; padding: 0 14px; border-radius: 8px; font: inherit; background: var(--bg); color: var(--text); border: 1px solid var(--line); cursor: pointer; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  @media (max-width: 560px) {
+    .row { flex-direction: column; align-items: stretch; } .btns { justify-content: flex-start; }
+    .counts li { font-size: .8rem; padding: 2px 8px; }
+    footer { padding: 8px 16px; } #status { font-size: .85rem; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>Sort your features</h1>
+  <p class="help">For each feature, pick <strong>M</strong> Must, <strong>S</strong> Should, <strong>C</strong> Could or <strong>W</strong> Won't. Tap again to clear. When you're done, press <strong>Copy our placement</strong> and paste it into the chat.</p>
+</header>
+<ul class="counts" aria-live="polite" id="counts"></ul>
+<main id="list"></main>
+<footer>
+  <button class="primary" id="copy" type="button">Copy our placement</button>
+  <button class="ghost" id="clear" type="button">Clear all</button>
+  <span id="status" role="status"></span>
+</footer>
+
+<script type="application/json" id="features">
+{
+  "product": "Example app",
+  "made": "YYYY-MM-DD HH:MM",
+  "areas": [
+    { "area": "Core", "items": [
+      { "n": 1, "name": "Example feature", "desc": "One line on what the user can do." },
+      { "n": 2, "name": "Example later idea", "desc": "Something the team marked for later.", "future": true }
+    ] }
+  ]
+}
+</script>
+
+<script>
+(function () {
+  var TIERS = [
+    { key: "m", label: "Must" }, { key: "s", label: "Should" },
+    { key: "c", label: "Could" }, { key: "w", label: "Won't" }
+  ];
+  var data;
+  try { data = JSON.parse(document.getElementById("features").textContent); }
+  catch (e) {
+    document.getElementById("list").textContent = "This sorter's feature list couldn't be read. Ask your assistant to make sorter.html again.";
+    return;
+  }
+  var storeKey = "kickoff-sorter:" + data.product + ":" + (data.made || "");
+  var choice = {};
+  try { choice = JSON.parse(localStorage.getItem(storeKey)) || {}; } catch (e) { choice = {}; }
+  var all = [];
+  data.areas.forEach(function (a) { a.items.forEach(function (it) { all.push(it); }); });
+  document.title = "Sort your features — " + data.product;
+
+  var list = document.getElementById("list");
+  data.areas.forEach(function (a) {
+    var h = document.createElement("h2"); h.textContent = a.area; list.appendChild(h);
+    a.items.forEach(function (it) {
+      var row = document.createElement("div"); row.className = "row";
+      var txt = document.createElement("div"); txt.className = "txt";
+      var nm = document.createElement("div"); nm.className = "name"; nm.textContent = it.n + ". " + it.name;
+      if (it.future) { var tg = document.createElement("span"); tg.className = "tag"; tg.textContent = "future"; nm.appendChild(tg); }
+      var ds = document.createElement("div"); ds.className = "desc"; ds.textContent = it.desc || "";
+      txt.appendChild(nm); txt.appendChild(ds);
+      var btns = document.createElement("div"); btns.className = "btns";
+      btns.setAttribute("role", "group"); btns.setAttribute("aria-label", "Tier for " + it.name);
+      TIERS.forEach(function (t) {
+        var b = document.createElement("button"); b.type = "button"; b.className = t.key;
+        b.textContent = t.key.toUpperCase();
+        b.setAttribute("aria-label", t.label);
+        b.setAttribute("title", t.label);
+        b.setAttribute("aria-pressed", String(choice[it.n] === t.key));
+        b.addEventListener("click", function () {
+          choice[it.n] = choice[it.n] === t.key ? undefined : t.key;
+          if (!choice[it.n]) delete choice[it.n];
+          Array.prototype.forEach.call(btns.children, function (x) {
+            x.setAttribute("aria-pressed", String(choice[it.n] === x.className));
+          });
+          save(); counts();
+        });
+        btns.appendChild(b);
+      });
+      row.appendChild(txt); row.appendChild(btns); list.appendChild(row);
+    });
+  });
+
+  function save() { try { localStorage.setItem(storeKey, JSON.stringify(choice)); } catch (e) {} }
+  function counts() {
+    var c = { m: 0, s: 0, c: 0, w: 0 }, none = 0;
+    all.forEach(function (it) { if (choice[it.n]) c[choice[it.n]]++; else none++; });
+    var ul = document.getElementById("counts"); ul.replaceChildren();
+    TIERS.forEach(function (t) {
+      var li = document.createElement("li"); li.textContent = t.label + ": " + c[t.key]; ul.appendChild(li);
+    });
+    var li = document.createElement("li"); li.textContent = "Not placed: " + none; ul.appendChild(li);
+  }
+  function text() {
+    var out = ["Our placement (" + data.product + ")", ""];
+    TIERS.concat([{ key: null, label: "Not placed" }]).forEach(function (t) {
+      var items = all.filter(function (it) { return (choice[it.n] || null) === t.key; });
+      out.push(t.label + " (" + items.length + "):");
+      items.forEach(function (it) { out.push("- " + it.n + ". " + it.name + (it.future ? " (future)" : "")); });
+      out.push("");
+    });
+    return out.join("\n");
+  }
+  document.getElementById("copy").addEventListener("click", function () {
+    var t = text(), status = document.getElementById("status");
+    function fallback() {
+      var ta = document.getElementById("result");
+      if (!ta) { ta = document.createElement("textarea"); ta.id = "result"; ta.setAttribute("aria-label", "Your placement"); list.appendChild(ta); }
+      ta.value = t; ta.focus(); ta.select();
+      var ok = false; try { ok = document.execCommand("copy"); } catch (e) {}
+      status.textContent = ok ? "Copied. Paste it into the chat." : "Select the text below, copy it, and paste it into the chat.";
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(t).then(function () { status.textContent = "Copied. Paste it into the chat."; }, fallback);
+    } else { fallback(); }
+  });
+  document.getElementById("clear").addEventListener("click", function () {
+    if (!window.confirm("Clear every choice on this page?")) return;
+    choice = {}; save();
+    Array.prototype.forEach.call(document.querySelectorAll(".btns button"), function (b) { b.setAttribute("aria-pressed", "false"); });
+    counts(); document.getElementById("status").textContent = "Cleared.";
+  });
+  counts();
+})();
+</script>
+</body>
+</html>
