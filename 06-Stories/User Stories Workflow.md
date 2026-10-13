@@ -25,7 +25,7 @@ Cover, in a few short lines and your own words:
 - [ ] The read-back showed a feature → tasks → stories table, and the counts (features, tasks, stories).
 - [ ] Each story's issue or card ends with its tasks as a checklist.
 - [ ] Review checklist (**INVEST**, used to check stories, not as the story format): each story is **I**ndependent enough to build once its dependencies are done, **N**egotiable in how it's built, **V**aluable to a real user, **E**stimable, **S**mall (about a day, at most 3 tasks), and **T**estable through its acceptance criteria.
-- [ ] The board export (if any) matches `user-stories.md` story for story, and nothing was run for the student.
+- [ ] The board export (if any) matches `user-stories.md` story for story, and nothing was run for the student. For Trello, `trello-cards.csv` was read back and has the right header, one row per card and only Must/Should/Could labels.
 
 ## IN
 - `05-Breakdown/Breakdown.md` — the tasks to turn into stories (including any **Setup** section).
@@ -278,7 +278,24 @@ echo "Done."
 
 **Never run this script for the student.** Tell them (and add: "If you rename an issue on GitHub, keep the 'Story N' at the start so the script can recognise it"): "To create the issues, open a terminal in your project repo folder and run `bash \"<path to kit>/06-Stories/create-issues.sh\"`. It shows you the list and asks before creating anything." On Windows, they can run it in Git Bash or WSL, or create issues by hand from the `issues/` files. Mention once: GitHub gives issues its own numbers (#1, #2…), which won't match story numbers. The issue titles keep "Story N", so `depends on: Story X` still makes sense on the board.
 
-**Trello** → Trello has no built-in CSV import, so don't make a CSV. Write `06-Stories/trello-cards.txt`: one story title per line, in story order, with the tier at the front (`[Must] Story 1 — As a user, I can create an account`). If there's a Setup checklist, the first line is `[Must] Setup — before Story 1`, and the student pastes the checklist into that card (or adds it as a Trello checklist). Tell the student: "In Trello, click **Add a card** on a list, paste all the lines at once, and Trello offers to create one card per line. Choose that. Then open each card and paste the story from its file in `06-Stories/issues/` into the description, and add the lines under **Tasks** as a Trello checklist (open the card, choose **Checklist**, and paste them; Trello makes one item per line). You can also create Must / Should / Could labels in Trello and add them as you go." Mention once that CSV import Power-Ups exist (Blue Cat, Excelefy, EasyCSV) if they want to try one, but the plain paste works without any add-on.
+**Trello** → write two files.
+
+1. **`06-Stories/trello-cards.csv`** — for importing every card at once. Trello can't import a CSV by itself; teams use the free **Import CSV and Excel** Power-Up by Blue Cat (its free plan allows 10 imports, and a team needs one). Write it exactly like this:
+   - UTF-8, comma-separated, with this header row: `Card Name,Card Description,Labels,List Name`
+   - One row per card, in story order. If there's a Setup checklist, its row comes first.
+   - **Card Name**: the story heading without the `## ` and without the tier tag (`Story 3 — As a user, I can take a photo of my plant`). The Setup row is `Setup — before Story 1`.
+   - **Card Description**: everything else from the story's card file in `06-Stories/issues/` (the Covers line, Goal, Design, Technical Considerations, the depends-on line, Acceptance Criteria), then a `**Tasks**` heading with the tasks as plain bullets (`- Photo upload form…`, not `- [ ]`: Trello descriptions don't show tick boxes). For the Setup row, the setup list as plain bullets.
+   - **Labels**: `Must`, `Should` or `Could` (Setup: `Must`).
+   - **List Name**: `Backlog` for every row.
+   - Put **every** field in double quotes, and write any `"` inside a field as `""`. Line breaks inside a quoted field are fine; that's how the description keeps its layout.
+   - After writing, check it: if you can run Python, read it back with the `csv` module and confirm the header, the row count (stories plus Setup) and that every Labels value is Must, Should or Could. If you can't, read the file back and count the rows by hand. Fix anything that's off before telling the student it's ready.
+
+2. **`06-Stories/trello-cards.txt`** — the no-Power-Up backup: one card title per line, in story order, with the tier at the front (`[Must] Story 1 — As a user, I can create an account`; Setup first if there is one).
+
+Tell the student, one step at a time:
+- "To import all your cards at once: on your Trello board, open **Power-Ups**, add **Import CSV and Excel** (by Blue Cat), and choose **Import**. Pick `06-Stories/trello-cards.csv`. Match the columns to Trello's fields: Card Name → Card Name, Card Description → Card Description, Labels → Labels, List Name → List. Each story becomes a card in a Backlog list, with its tier as a label."
+- "Don't want a Power-Up? In Trello's website or desktop app (the phone app won't do this), click **Add a card**, paste all the lines from `trello-cards.txt` at once, and choose to create one card per line. Then paste each story's text from its file in `06-Stories/issues/` into the card description."
+- "Either way, you can turn a card's tasks into a Trello checklist: open the card, choose **Checklist**, and paste the task lines; Trello makes one item per line."
 
 **Both** → write both. **None** → skip the export.
 
@@ -349,10 +366,10 @@ Then ...
 ## Story 2 — ...
 ```
 
-Plus, for every board: `06-Stories/issues/story-NN.md` (and `issues/setup.md`), each ending with its **Tasks** checklist. Depending on the board: `06-Stories/create-issues.sh` and `issues/list.txt`, and/or `06-Stories/trello-cards.txt`.
+Plus, for every board: `06-Stories/issues/story-NN.md` (and `issues/setup.md`), each ending with its **Tasks** checklist. Depending on the board: `06-Stories/create-issues.sh` and `issues/list.txt`, and/or `06-Stories/trello-cards.csv` (Power-Up import) and `06-Stories/trello-cards.txt` (paste backup).
 
 ## Re-running this step
-If `user-stories.md` exists, show a short summary first: how many stories per tier and the highest story number. Then ask: "Do you want to **add** new stories, **update** specific stories, or **start over**?" Before changing anything, snapshot `user-stories.md` **and every export file** (`create-issues.sh`, `issues/`, `trello-cards.txt`) to `_history/06-Stories/`.
+If `user-stories.md` exists, show a short summary first: how many stories per tier and the highest story number. Then ask: "Do you want to **add** new stories, **update** specific stories, or **start over**?" Before changing anything, snapshot `user-stories.md` **and every export file** (`create-issues.sh`, `issues/`, `trello-cards.csv`, `trello-cards.txt`, and any earlier `trello-cards-new-*.csv`) to `_history/06-Stories/`.
 - **Add:** continue numbering from Story [N+1]; never renumber existing stories. If a new story is for a kind of user you haven't used yet ("a friend with the link"), confirm the words with the team. If a new story belongs earlier in the build order than its number suggests (a new Must after the Coulds, say), add a line under its heading: `_build after: Story X_`.
 - **Update:** ask which story numbers; change only those. To change a story's tier, update its tag and tell the student to change the label on the board too. If the change adds or removes tasks, update that story's task checklist and the count line at the top, and offer to update `Breakdown.md` (standing rule 12).
 - **Start over:** before rebuilding, compare the current stories with `Breakdown.md`. For anything that only exists in the stories (added in an earlier update), ask whether to keep it, and suggest re-running 05 to add it there. Then rebuild. If Story 1 in an older file still carries several Setup tasks, offer to move them into the Setup checklist (story numbers don't change).
@@ -360,7 +377,7 @@ If `user-stories.md` exists, show a short summary first: how many stories per ti
 Every time, re-check dependencies across the whole file and update the Coverage table. Then ask: "Have you already created the GitHub issues or Trello cards?"
 - **No:** regenerate the export files in full.
 - Either way, always regenerate `create-issues.sh` from the current template (it's safe to re-run: it skips stories that already have an issue).
-- **Yes:** keep the export files complete (so they always match `user-stories.md`), and tell the student exactly what to do on the board: new stories → run `create-issues.sh` again (it skips stories that already have an issue), or paste only the new lines into Trello; changed stories → edit the existing issue or card by hand, because re-creating them would make duplicates. For each changed story, name the issue or card and say whether to change its title, its description, its task checklist, or several of these. Stories no longer in the file → name each issue or card and ask whether to close/archive it or keep it for later. Never delete anything for them.
+- **Yes:** keep the export files complete (so they always match `user-stories.md`), and tell the student exactly what to do on the board: new stories → run `create-issues.sh` again (it skips stories that already have an issue), or, for Trello, write `06-Stories/trello-cards-new-YYYY-MM-DD.csv` holding only the new stories (same header and rules as `trello-cards.csv`, read back the same way) and tell the student to import **that** file, not `trello-cards.csv`, which would duplicate every card they already have (each import also uses one of the Power-Up's 10 free imports), or to paste only the new lines from `trello-cards.txt`; changed stories → edit the existing issue or card by hand, because re-creating them would make duplicates. For each changed story, name the issue or card and say whether to change its title, its description, its task checklist, or several of these. Stories no longer in the file → name each issue or card and ask whether to close/archive it or keep it for later. Never delete anything for them.
 
 If `Team.md` shows you copied files into the team's project repo before (Step 6), offer to copy them again, with the same don't-overwrite rules. Finally, tell the student which files are now out of date (`07-Prototype/screens.md`, `prototype.html`, and `05-Breakdown/Breakdown.md` if a feature's tier changed or it has no breakdown yet) (standing rule 12).
 
