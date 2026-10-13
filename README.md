@@ -12,14 +12,22 @@ There's nothing to install. This folder *is* the kit.
 
 If you have a zip, unzip it. If you're on the GitHub page, click **Code → Download ZIP** and unzip it. The folder may be called `Project Kickoff` or `project-kickoffs-main`; either is fine, and you can rename it.
 
+If you use git, you can clone it instead. The folder will be called `project-kickoffs`:
+
+```sh
+git clone https://github.com/judithsoldyess/project-kickoffs.git
+```
+
 **With Claude Code**
 
-Open a terminal, go to the folder, and start Claude Code. For example, if you downloaded it from GitHub into your Downloads folder:
+Open a terminal, go to the folder, and start Claude Code. For example, if you downloaded the ZIP from GitHub into your Downloads folder:
 
-```
+```sh
 cd Downloads/project-kickoffs-main
 claude
 ```
+
+If you cloned it, the folder is `project-kickoffs` instead.
 
 Use your folder's real name and location. Put quotes around it if the name has a space: `cd "Downloads/Project Kickoff"`. Then type: **Start Here**.
 
@@ -41,14 +49,14 @@ Run them in order. Each one reads the files the earlier steps wrote, so you don'
 
 | Step | Reads (IN) | Writes (OUT) | Good looks like |
 |---|---|---|---|
-| **Start Here** | — | `Team.md` | Stack, accounts, course requirements, deadline, board |
-| **01-Idea** | `Team.md` | `01-Idea/Idea.md` | 5–8 ideas from your team's interests; the team picked one |
-| **02-Pitch** | `Idea.md` | `02-Pitch/Pitch.md` | A specific, speakable pitch plus a one-liner and a README blurb |
-| **03-Features** | `Pitch.md` | `03-Features/Features.md` | About 30 features, grouped by area, duplicates removed |
-| **04-Priorities** | `Features.md` (or a board photo) | `04-Priorities/sorter.html`, `MoSCoW.md` | Every feature in Must / Should / Could / Won't, placed by your team with a click-to-sort page |
-| **05-Breakdown** | `MoSCoW.md` | `05-Breakdown/Breakdown.md` | Each feature split into concrete 2–4 hour tasks, one feature at a time |
-| **06-Stories** | `Breakdown.md`, `MoSCoW.md`, `Team.md` | `06-Stories/user-stories.md` + GitHub and/or Trello export | Stories of up to 3 tasks each, in build order, with their tasks as a checklist on each card |
-| **07-Prototype** | `user-stories.md`, `Pitch.md`, `Team.md` | `07-Prototype/look-preview.html`, `prototype.html`, `style-guide.html`, `screens.md` | Pick a look from a preview, then a clickable prototype that opens with a double-click |
+| **Start Here** | — | [`Team.md`](./Team.md) | Stack, accounts, course requirements, deadline, board |
+| **01-Idea** | [`Team.md`](./Team.md) | [`01-Idea/Idea.md`](./01-Idea/Idea.md) | 5–8 ideas from your team's interests; the team picked one |
+| **02-Pitch** | [`Idea.md`](./01-Idea/Idea.md) | [`02-Pitch/Pitch.md`](./02-Pitch/Pitch.md) | A specific, speakable pitch plus a one-liner and a README blurb |
+| **03-Features** | [`Pitch.md`](./02-Pitch/Pitch.md) | [`03-Features/Features.md`](./03-Features/Features.md) | About 30 features, grouped by area, duplicates removed |
+| **04-Priorities** | [`Features.md`](./03-Features/Features.md) (or a board photo) | [`04-Priorities/sorter.html`](./04-Priorities/sorter.html), [`MoSCoW.md`](./04-Priorities/MoSCoW.md) | Every feature in Must / Should / Could / Won't, placed by your team with a click-to-sort page |
+| **05-Breakdown** | [`MoSCoW.md`](./04-Priorities/MoSCoW.md) | [`05-Breakdown/Breakdown.md`](./05-Breakdown/Breakdown.md) | Each feature split into concrete 2–4 hour tasks, one feature at a time |
+| **06-Stories** | [`Breakdown.md`](./05-Breakdown/Breakdown.md), [`MoSCoW.md`](./04-Priorities/MoSCoW.md), [`Team.md`](./Team.md) | [`06-Stories/user-stories.md`](./06-Stories/user-stories.md) + GitHub and/or Trello export | Stories of up to 3 tasks each, in build order, with their tasks as a checklist on each card |
+| **07-Prototype** | [`user-stories.md`](./06-Stories/user-stories.md), [`Pitch.md`](./02-Pitch/Pitch.md), [`Team.md`](./Team.md) | [`07-Prototype/look-preview.html`](./07-Prototype/look-preview.html), [`prototype.html`](./07-Prototype/prototype.html), [`style-guide.html`](./07-Prototype/style-guide.html), [`screens.md`](./07-Prototype/screens.md) | Pick a look from a preview, then a clickable prototype that opens with a double-click |
 
 Already have an idea? Skip 01. Already have a feature list or a MoSCoW board from the workshop? Put a photo in a `workshop` folder inside the kit, then start at 04.
 
